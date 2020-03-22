@@ -8,16 +8,20 @@ namespace uspCaller
     {
         static void Main(string[] args)
         {
-            // But your connection string here.
-            string connetionString = "Data Source=BATPC;Initial Catalog=DBD_Company;Integrated Security=True";
+            // Put your connection string here.
+            //string connetionString = "Data Source=BATPC;Initial Catalog=DBD_Company;Integrated Security=True";
+            string connetionString = "Data Source=DESKTOP-N7MQ963;Initial Catalog=Company;Integrated Security=True";
 
             while (true)
             {
-                Console.WriteLine("Type 1 for: usp_CreateDepartment\nType 2 for: usp_UpdateDepartmentName\nType 3 for: usp_UpdateDepartmentManager" +
-                    "\nType 4 for: usp_DeleteDepartment" +
-                    "\nType 5 for: usp_GetDepartment" +
-                    "\nType 6 for: usp_GetAllDepartments" +
-                    "\nType q to quit.\n");
+                Console.WriteLine("Type 1 for: usp_CreateDepartment\n" +
+                    "Type 2 for: usp_UpdateDepartmentName\n" +
+                    "Type 3 for: usp_UpdateDepartmentManager\n" +
+                    "Type 4 for: usp_DeleteDepartment\n" +
+                    "Type 5 for: usp_GetDepartment\n" +
+                    "Type 6 for: usp_GetAllDepartments\n" +
+                    "Type q to quit.\n");
+
                 string caseSwitch = Console.ReadLine();
 
                 switch (caseSwitch)
@@ -40,7 +44,16 @@ namespace uspCaller
                                     cmd.Parameters.Add("@MgrSSN", SqlDbType.Int).Value = mgrSSN;
 
                                     con.Open();
-                                    cmd.ExecuteNonQuery();
+
+                                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                                    {
+                                        while (rdr.Read())
+                                        {
+                                            string newDepartmentNumber = rdr["DNumber"].ToString();
+                                            Console.WriteLine($"{newDepartmentNumber}");
+                                        }
+                                        Console.WriteLine("");
+                                    }
                                 }
                             }
                             break;
